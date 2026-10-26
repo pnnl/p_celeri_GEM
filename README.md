@@ -18,7 +18,6 @@ The repository contains iPiccel954, a genome-scale model with 3525 reactions, 29
 | val_compute.py to val_compute4.py and val_cache.json | Model validation calculations and their cached results |
 | figure_1.py to figure_5.py | Scripts for the main figures |
 | figure_S1.py to figure_S5.py | Scripts for the supplementary figures |
-| LICENSE.txt and DISCLAIMER.txt | License and disclaimer |
 
 ## Requirements
 
@@ -59,4 +58,4 @@ Enzyme turnover numbers were predicted with TurNuP. Protein abundances come from
 
 ## Contact
 
-Niaz Bahar Chowdhury, Environmental Molecular Sciences Laboratory, Pacific Northwest National Laboratory
+Niaz Bahar Chowdhury (niazbahar.chowdhury@pnnl.gov), Environmental Molecular Sciences Laboratory, Pacific Northwest National Laboratory
