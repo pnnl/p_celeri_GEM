@@ -2,7 +2,7 @@
 
 Genome-scale metabolic model and enzyme-constrained models of *Picochlorum celeri*, with the data and code for the manuscript "Enzyme-Constrained Metabolic Modeling Reveals CO₂-Dependent Growth Control in *Picochlorum celeri*".
 
-The repository contains iPiccel954, a genome-scale model with 3525 reactions, 2973 metabolites and 954 genes, and eciPiccel954, its enzyme-constrained version. The enzyme-constrained models are built for six conditions, wild type in air, wild type at elevated CO₂, and four carbonic anhydrase lines at elevated CO₂ (CAII, CA3, CA4 and CA7).
+The repository contains iPiccel954, a genome-scale model with 3525 reactions, 2973 metabolites and 954 genes, and eciPiccel954, its enzyme-constrained version. The enzyme-constrained models are built for two conditions, wild type in air and wild type at elevated CO₂.
 
 ## Files
 
