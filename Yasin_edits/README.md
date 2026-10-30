@@ -1,4 +1,4 @@
-# iPiccel954 patched (copy of iPiccel954 curated against the lab's measurements)
+# Yasin_edits: copy of iPiccel954 curated against the lab's measurements
 
 This branch adds one folder and changes nothing else in the repository. `iPiccel954.xml` and all of your scripts, figures and tables on `main` are untouched.
 
