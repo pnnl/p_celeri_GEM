@@ -3,7 +3,7 @@ import json, warnings
 import cobra
 from cobra.flux_analysis import pfba
 warnings.filterwarnings("ignore")
-MODEL_PATH = "iPiccel952.xml"
+MODEL_PATH = "iPiccel954.xml"
 GROWTH_TG2 = 0.323
 # measured TG2 INST-MFA fluxes (Steichen et al. 2024, Fig. 3), per 100 units of net CO2 uptake, and model reactions
 FLUXES = {

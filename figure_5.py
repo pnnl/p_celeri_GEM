@@ -246,7 +246,7 @@ if NDRAW > 0:
 # ---------------------------------------------------------------------------
 # Step 3. Analysis and figure
 # ---------------------------------------------------------------------------
-model = cobra.io.read_sbml_model(f"{root}/WT_Air/irrev_iPiccel952.xml")
+model = cobra.io.read_sbml_model(f"{root}/WT_Air/irrev_iPiccel954.xml")
 pa = pd.read_excel(prot_path).iloc[:, :3].set_index("Protein")
 
 def enzyme_abundance(rid, col):

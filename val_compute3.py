@@ -1,7 +1,7 @@
 """Net inorganic carbon uptake range (FVA) at the measured TG2 growth rate. Adds 'cuptake' to val_cache.json."""
 import json, warnings, cobra
 warnings.filterwarnings("ignore")
-m = cobra.io.read_sbml_model("iPiccel952.xml"); m.solver = "glpk"
+m = cobra.io.read_sbml_model("iPiccel954.xml"); m.solver = "glpk"
 m.reactions.get_by_id("EX_nh4(e)").upper_bound = 0
 MU = 0.323
 m.reactions.get_by_id("Biomass_Picre_Auto").lower_bound = MU

@@ -70,6 +70,9 @@ for name, c in COND.items():
     )
     print(name, {k: v for k, v in D[name].items() if k not in ("rounds", "cum", "first", "kcat")})
 
+# Number of reactions with a kcat (rows of the kcat table, forward and reverse counted separately)
+N_KCAT = len(D["WT-Air"]["kcat"])
+
 # ---------------------------------------------------------------------------
 # Style
 # ---------------------------------------------------------------------------
@@ -146,7 +149,7 @@ for x, (lines, fc, tc) in zip(xs, specs):
     box(axA, x, y0, bw, bh, lines, fc, tc=tc)
 for i in range(5):
     arrow(axA, (xs[i] + bw + 0.2, y0 + bh / 2), (xs[i + 1] - 0.2, y0 + bh / 2))
-axA.text(xs[1] + bw / 2, y0 - 1.2, "1,282 reactions", ha="center", va="top", fontsize=9.5, color=MUTED)
+axA.text(xs[1] + bw / 2, y0 - 1.2, f"{N_KCAT:,} reactions", ha="center", va="top", fontsize=9.5, color=MUTED)
 axA.text(xs[4] + bw / 2, y0 - 1.2, "two stages", ha="center", va="top", fontsize=9.5, color=MUTED)
 
 # ---------------------------------------------------------------------------
@@ -264,20 +267,21 @@ paired(axD, "pool_target", "pool", 0.125, [0, 0.05, 0.1], 0.006)
 # ---------------------------------------------------------------------------
 axE = fig.add_subplot(gs[2, 4:6])
 letter(axE, "E", title="Reactions corrected")
+TMAX = max(D[n]["n_stage1"] + D[n]["n_stage2"] for n in COND)  # length of the grey track
 for i, name in enumerate(COND):
     y = 1 - i
     s1, s2 = D[name]["n_stage1"], D[name]["n_stage2"]
-    axE.plot([0, 60], [y, y], color=TRACK, lw=15.3, solid_capstyle="round", zorder=1)
+    axE.plot([0, TMAX], [y, y], color=TRACK, lw=15.3, solid_capstyle="round", zorder=1)
     x = 0
     if s1:
         axE.plot([0, s1], [y, y], color=YELLOW, lw=15.3, solid_capstyle="round", zorder=3)
         x = s1
     axE.plot([x + 1.0, x + s2], [y, y], color=AQUA, lw=15.3, solid_capstyle="round", zorder=4)
-    axE.text(63, y, f"{s1} + {s2}", va="center", fontsize=9.9, color=INK)
+    axE.text(TMAX + 5, y, f"{s1} + {s2}", va="center", fontsize=9.9, color=INK)
 axE.set_yticks([1, 0])
 axE.set_yticklabels(list(COND))
 axE.set_ylim(-0.6, 1.6)
-axE.set_xlim(-2, 80)
+axE.set_xlim(-2, TMAX + 20)
 axE.set_xticks([])
 for sp in axE.spines.values():
     sp.set_visible(False)
@@ -327,7 +331,7 @@ kc_all = D["WT-CO2"]["kcat"]
 med_all = float(np.median(kc_all["Kcat"]) / 3600.0)
 items = [(0, med_all, GREY, "All")]
 x = 1.2
-labels = [("All 1,282", 0.0)]
+labels = [(f"All {N_KCAT:,}", 0.0)]
 groups = [(0, med_all, GREY)]
 for gi, name in enumerate(COND):
     kcn = D[name]["kcat"]
@@ -345,7 +349,7 @@ axG.set_yscale("log")
 axG.set_ylim(YG, 14000)
 axG.set_xlim(-0.4, 3.4)
 axG.set_xticks([0, 1.4, 2.4])
-axG.set_xticklabels(["All 1,282\nreactions", "WT-Air\ncorrected", "WT-CO2\ncorrected"], fontsize=9.9)
+axG.set_xticklabels([f"All {N_KCAT:,}\nreactions", "WT-Air\ncorrected", "WT-CO2\ncorrected"], fontsize=9.9)
 axG.set_yticks([10, 100, 1000, 10000])
 axG.set_yticklabels(["10", "100", "1,000", "10,000"]); axG.minorticks_off()
 style(axG)

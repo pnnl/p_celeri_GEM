@@ -1,5 +1,5 @@
 """
-Leave-out test for the iPiccel952 ecGEM calibration.
+Leave-out test for the iPiccel954 ecGEM calibration.
 
 Question
     Do the kcat corrections found for one condition predict growth in the other condition when only the measured protein
@@ -86,7 +86,7 @@ MODELS = {}
 
 def load_model(name):
     if name not in MODELS:
-        m = cobra.io.read_sbml_model(f"{ra_dir(name)}/irrev_iPiccel952.xml")
+        m = cobra.io.read_sbml_model(f"{ra_dir(name)}/irrev_iPiccel954.xml")
         try:
             m.solver = "gurobi"
         except Exception:

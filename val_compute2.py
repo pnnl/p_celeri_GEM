@@ -3,7 +3,7 @@ import json, warnings, time
 import cobra
 warnings.filterwarnings("ignore")
 exec(open("val_compute.py").read().split("m = cobra.io.read_sbml_model")[0])   # FLUXES, constants
-m = cobra.io.read_sbml_model("iPiccel952.xml")
+m = cobra.io.read_sbml_model("iPiccel954.xml")
 m.solver = "glpk"
 R = json.load(open("val_cache.json"))
 m.reactions.get_by_id("EX_nh4(e)").upper_bound = 0   # urea is the nitrogen source, no ammonium excretion

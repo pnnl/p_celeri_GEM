@@ -88,10 +88,14 @@ orig = cobra.io.read_sbml_model(model_path)
 names = {r.id: r.name for r in orig.reactions}
 
 
-def rname(r, n=30):
+def rname(r, n=40, width=28):
+    """Full enzyme name, wrapped over two lines when it is long."""
+    import textwrap
     s_ = names.get(r) or names.get(base(r)) or r
-    s_ = s_.replace("_", " ")
-    return s_ if len(s_) <= n else s_[: n - 1] + "."
+    s_ = s_.replace("_", " ").replace(":", ": ").replace(":  ", ": ")
+    if len(s_) > n:
+        s_ = s_[: n - 1].rstrip(" ,;:-(/") + "."
+    return "\n".join(textwrap.wrap(s_, width, break_long_words=True))
 
 
 # ---------------------------------------------------------------------------
@@ -330,9 +334,9 @@ ca, cc = pd.read_csv(f"{work}/control_air.csv"), pd.read_csv(f"{work}/control_co
 ca12 = pd.read_csv(f"{work}/control_air_1.20.csv")
 ca05 = pd.read_csv(f"{work}/control_air_1.05.csv")
 
-fig = plt.figure(figsize=(11.9, 14.2), dpi=100, layout="constrained")
-fig.get_layout_engine().set(w_pad=0.04, h_pad=0.06, wspace=0.12, hspace=0.14, rect=(0.0, 0.0, 1.0, 0.965))
-gs = fig.add_gridspec(3, 3)
+fig = plt.figure(figsize=(12.6, 14.6), dpi=100)
+gs = fig.add_gridspec(3, 3, left=0.075, right=0.985, top=0.955, bottom=0.05, wspace=0.78, hspace=0.36,
+                      width_ratios=[1.0, 1.0, 1.0], height_ratios=[1.0, 1.0, 1.3])
 
 # ---------------------------------------------------------------------------
 # A. Threshold
@@ -371,11 +375,11 @@ for mname, _ in modes:
 for i, v in enumerate(gmax):
     y = len(modes) - 1 - i
     hbar(axB, y, max(v, 0.0), BLUE, 11.0)
-    val(axB, max(v, 0.0), y, f"{max(v, 0.0):.1f}%, {n10[i]} reaction with 10% or more" if n10[i] == 1 else f"{max(v, 0.0):.1f}%, {n10[i]} reactions with 10% or more", va="center", ha="left", fontsize=8.5)
+    val(axB, max(v, 0.0), y, f"{max(v, 0.0):.1f}%\n{n10[i]} reaction with gain of 10% or more" if n10[i] == 1 else f"{max(v, 0.0):.1f}%\n{n10[i]} reactions with gain of 10% or more", va="center", ha="left", fontsize=8.5, linespacing=1.25)
 axB.set_yticks(range(len(modes)))
 axB.set_yticklabels([m_ for _, m_ in modes][::-1], fontsize=8.5)
 axB.set_ylim(-0.7, len(modes) - 0.3)
-axB.set_xlim(0, 85)
+axB.set_xlim(0, 150); axB.set_xticks([0, 20, 40, 60, 80])
 axB.set_xlabel("Largest growth gain (%)", labelpad=2)
 style(axB, left=False)
 
@@ -398,7 +402,7 @@ for j, (cond, col) in enumerate((("air", BLUE), ("co2", ORANGE))):
         val(axC, x, v, f"{v:.2f}", dx=0, dy=6, ha="center", va="bottom", fontsize=7.5, rotation=90)
     print(cond, "growth without the pool relative to calibrated", round(d_[1e6] / ref, 2), flush=True)
 axC.set_xticks(range(len(KS)))
-axC.set_xticklabels([f"{k:g}x" for k in KS], fontsize=8.8)
+axC.set_xticklabels([f"{k:g}" for k in KS], fontsize=9)
 axC.set_xlim(-0.6, len(KS) - 0.4)
 axC.set_ylim(0, 1.4 * rel_max)
 axC.set_xlabel("Pool relative to calibrated", labelpad=2)
@@ -458,30 +462,31 @@ if rb_air is not None:
         hbar(axE, y, max(v, 0.6), BLUE, 7.5)
         val(axE, max(v, 0.6), y, f"{v:.0f}", va="center", ha="left", fontsize=8.2)
     axE.set_yticks(range(n))
-    axE.set_yticklabels([rname(r, 24) for r in bot][::-1], fontsize=8.2)
+    axE.set_yticklabels([rname(r) for r in bot][::-1], fontsize=7.8)
     axE.set_ylim(-0.7, n - 0.3)
     axE.set_xlim(0, 118)
     axE.set_xlabel("Draws as a bottleneck (%)", labelpad=2)
     style(axE, left=False)
 
     axF = fig.add_subplot(gs[1, 2])
-    head(axF, "F", "Rank agreement with calibrated C")
+    head(axF, "F", "Rank agreement with C")
     c0 = ca.set_index("reaction").C
     rhos = []
     for run, g_ in rb_air.groupby("run", sort=False):
         s_ = g_.set_index("reaction").C
         common = s_.index.intersection(c0.index)
         rhos.append(stats.spearmanr(c0[common], s_[common])[0])
-    for i, v in enumerate(rhos):
-        vbar(axF, i, v, BLUE, 13.0 if len(rhos) < 12 else 8.0)
-        val(axF, i, v, f"{v:.2f}", dx=0, dy=8 if v >= 0 else -8, ha="center", va="bottom" if v >= 0 else "top", fontsize=8.2)
-    axF.set_xticks(range(len(rhos)))
-    axF.set_xticklabels([str(i + 1) for i in range(len(rhos))], fontsize=9.2)
-    axF.set_xlim(-0.6, len(rhos) - 0.4)
-    axF.set_ylim(-0.25, 1.2 * max(max(rhos), 0.1))
-    axF.axhline(0, color=AXIS, lw=0.6, zorder=2)
+    xs_ = np.arange(len(rhos))
+    med_ = float(np.median(rhos))
+    axF.axhline(med_, color=AXIS, lw=1.0, ls=(0, (4, 3)), zorder=1)
+    axF.scatter(xs_, rhos, s=46, color=BLUE, zorder=3, linewidths=0)
+    axF.text(0.03, 0.04, f"median {med_:.2f}", transform=axF.transAxes, ha="left", va="bottom", fontsize=9.5)
+    axF.set_xticks(list(range(0, len(rhos), 5)) + ([len(rhos) - 1] if (len(rhos) - 1) % 5 else []))
+    axF.set_xticklabels([str(i + 1) for i in axF.get_xticks()], fontsize=9.2)
+    axF.set_xlim(-0.8, len(rhos) - 0.2)
+    axF.set_ylim(max(0.0, np.floor((min(rhos) - 0.03) * 20) / 20), 1.0)
     axF.set_xlabel("kcat perturbation draw", labelpad=2)
-    axF.set_ylabel("Spearman correlation of C", labelpad=2)
+    axF.set_ylabel("Spearman correlation with C", labelpad=2)
     style(axF)
     print("WT-Air rank correlation", [round(v, 2) for v in rhos], flush=True)
 
@@ -530,7 +535,7 @@ if rb_air is not None and rb_co2 is not None:
         hbar(axH, y, max(v, 0.6), ORANGE if r == top_cal else BLUE, 7.5)
         val(axH, max(v, 0.6), y, f"{v:.0f}", va="center", ha="left", fontsize=8.2)
     axH.set_yticks(range(n))
-    axH.set_yticklabels([rname(r, 24) for r in order][::-1], fontsize=8.2)
+    axH.set_yticklabels([rname(r) for r in order][::-1], fontsize=7.8)
     axH.set_ylim(-0.7, n - 0.3)
     axH.set_xlim(0, 118)
     axH.set_xlabel("Draws as a bottleneck (%)", labelpad=2)

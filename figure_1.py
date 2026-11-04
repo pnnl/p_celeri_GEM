@@ -36,8 +36,8 @@ BIOMASS_AFTER = None                                          # computed below f
 BIOMASS_CLASSES = ["Protein", "Carbohydrate", "Lipid", "RNA", "DNA", "Pigments"]
 UNBALANCED_STAGES = [613, 127]                                 # draft, after hydrogen correction
 CYCLE_REACTIONS = [1437, 1246, 1]                              # draft, after cycle removal, final (MEMOTE)
-UNBOUNDED_FINAL = 0.37                                         # % of reactions with unbounded flux in the final model (MEMOTE)
-STAGE7_FACTOR = 1.191406                                       # non-GAM rescaling factor to 1 g/mmol (curation log, Table S5A)
+UNBOUNDED_FINAL = 0.43                                         # % of reactions with unbounded flux in the final model (MEMOTE)
+STAGE7_FACTOR = 1.191406                                       # non-GAM rescaling factor to 1 g/mmol (Supplementary Table S1)
 MEMOTE = [("Total", 71.5), ("Consistency", 56.9), ("Metabolite\nannotation", 71.2),
           ("Reaction\nannotation", 70.1), ("Gene\nannotation", 33.3), ("SBO terms", 90.9)]
 
@@ -250,7 +250,7 @@ box(65.5, 22, 12, H, "Unique to\niPcel")
 box(65.5, 9, 12, H, "Unique to\niPicre1230")
 box(83.5, 22, 12, 12, "Final iPcel GEM", "4344 rxn\n1084 genes", fc=DBLUE, tc=INK, ec=BLUE, bold=True)
 box(95, 22, 9.5, 12, "Curation", "7 stages", fc=LBLUE, ec=BLUE)
-box(95, 6.5, 9.5, 11, "iPiccel954", "3525 rxn\n954 genes", fc=DGREEN, tc=INK, ec=GREEN, bold=True)
+box(95, 6.5, 9.5, 11, "iPiccel954", f"{n_rxn} rxn\n{FINAL_GENES} genes", fc=DGREEN, tc=INK, ec=GREEN, bold=True)
 
 # The RAPS box spans x 16.75 to 26.25, so the two input arrows stop just outside its left edge.
 arrow((13.6, 31.2), (16.45, 25.0))

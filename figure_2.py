@@ -105,7 +105,7 @@ SUBS.sort(key=lambda t: -t[1])
 # derived from reported fold changes or read from the bars of Fig. 4c.
 # ---------------------------------------------------------------------------
 EXTRA = {
-    "iPiccel954": dict(growth=0.337, active=1860, ess_g=116, ess_r=1258),
+    "iPiccel954": dict(growth=0.3976, active=1867, ess_g=128, ess_r=1237),
     "iCO1515": dict(growth=1.711, active=715, ess_g=237, ess_r=670),
     "iCre1355": dict(growth=1.711 / 8, active=1350, ess_g=242, ess_r=437),
     "iCZ843": dict(growth=1.711 / 67, active=1280, ess_g=188, ess_r=388),
